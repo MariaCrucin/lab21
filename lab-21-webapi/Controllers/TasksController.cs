@@ -28,9 +28,9 @@ namespace lab_21_webapi.Controllers
 
             if (deadlineFrom != null)
                 result = result.Where(t => t.Deadline >= deadlineFrom);
-
+            
             if (deadlineTo != null)
-                result = result.Where(t => t.Deadline <= deadlineTo);
+                result= result.Where(t => t.Deadline <= deadlineTo);
 
             return result;
         }
@@ -65,11 +65,18 @@ namespace lab_21_webapi.Controllers
             var existing = context.Tasks.AsNoTracking().FirstOrDefault(t => t.Id == id);
             if (existing == null)
             {
+                task.DateClosed = null;
+                task.DateAdded = DateTime.Now;
                 context.Tasks.Add(task);
                 context.SaveChanges();
                 return Ok(task);
             }
             task.Id = id;
+            if (task.TaskState == TaskState.Closed && existing.TaskState != TaskState.Closed)
+                task.DateClosed = DateTime.Now;
+            else if (existing.TaskState == TaskState.Closed && task.TaskState != TaskState.Closed)
+                task.DateClosed = null;
+
             context.Tasks.Update(task);
             context.SaveChanges();
             return Ok(task);
