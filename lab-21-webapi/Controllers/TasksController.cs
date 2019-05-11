@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using lab_21_webapi.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -18,9 +19,20 @@ namespace lab_21_webapi.Controllers
 
         // GET: api/Tasks
         [HttpGet]
-        public IEnumerable<Models.Task> Get()
+        public IEnumerable<Models.Task> Get([FromQuery]DateTime? deadlineFrom, [FromQuery]DateTime? deadlineTo)
         {
-            return context.Tasks;
+            IQueryable<Task> result = context.Tasks;
+
+            if (deadlineFrom == null && deadlineTo == null)
+                return result;
+
+            if (deadlineFrom != null)
+                result = result.Where(t => t.Deadline >= deadlineFrom);
+
+            if (deadlineTo != null)
+                result = result.Where(t => t.Deadline <= deadlineTo);
+
+            return result;
         }
 
         // GET: api/Tasks/5
@@ -40,6 +52,8 @@ namespace lab_21_webapi.Controllers
         [HttpPost]
         public void Post([FromBody] Task task)
         {
+            task.DateClosed = null;
+            task.DateAdded = DateTime.Now;
             context.Tasks.Add(task);
             context.SaveChanges();
         }
