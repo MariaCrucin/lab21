@@ -72,7 +72,7 @@ namespace lab_21_webapi.Controllers
                 return Ok(task);
             }
             task.Id = id;
-            if (task.TaskState == TaskState.Closed && existing.TaskState != TaskState.Closed)
+            if (existing.TaskState != TaskState.Closed && task.TaskState == TaskState.Closed)
                 task.DateClosed = DateTime.Now;
             else if (existing.TaskState == TaskState.Closed && task.TaskState != TaskState.Closed)
                 task.DateClosed = null;
@@ -86,7 +86,7 @@ namespace lab_21_webapi.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            var existing = context.Tasks.FirstOrDefault(t => t.Id == id);
+            var existing = context.Tasks.Include(t => t.Comments).FirstOrDefault(t => t.Id == id);
             if (existing == null)
             {
                 return NotFound();

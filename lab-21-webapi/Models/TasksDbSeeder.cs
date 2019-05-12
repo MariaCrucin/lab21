@@ -24,7 +24,7 @@ namespace lab_21_webapi.Models
                     Description = "Test 1",
                     DateAdded = DateTime.Now,
                     Deadline = new DateTime(2019, 7, 10, 14, 30, 0),
-                    TaskImportance = (TaskImportance)1,
+                    TaskImportance = TaskImportance.Hight,
                     TaskState = (TaskState)1
                 },
                 new Task
