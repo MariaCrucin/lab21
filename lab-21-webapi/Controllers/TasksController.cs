@@ -21,7 +21,7 @@ namespace lab_21_webapi.Controllers
         [HttpGet]
         public IEnumerable<Models.Task> Get([FromQuery]DateTime? deadlineFrom, [FromQuery]DateTime? deadlineTo)
         {
-            IQueryable<Task> result = context.Tasks;
+            IQueryable<Task> result = context.Tasks.Include(t => t.Comments);
 
             if (deadlineFrom == null && deadlineTo == null)
                 return result;
@@ -39,7 +39,7 @@ namespace lab_21_webapi.Controllers
         [HttpGet("{id}", Name = "Get")]
         public IActionResult Get(int id)
         {
-            var existing = context.Tasks.FirstOrDefault(task => task.Id == id);
+            var existing = context.Tasks.Include(t => t.Comments).FirstOrDefault(task => task.Id == id);
             if (existing == null)
             {
                 return NotFound();

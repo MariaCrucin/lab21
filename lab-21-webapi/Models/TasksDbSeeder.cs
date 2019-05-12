@@ -11,7 +11,7 @@ namespace lab_21_webapi.Models
         {
             context.Database.EnsureCreated();
 
-            // Look for any flowers.
+            // Look for any tasks.
             if (context.Tasks.Any())
             {
                 return;   // DB has been seeded

@@ -35,6 +35,8 @@ namespace lab_21_webapi.Models
         public TaskState TaskState { get; set; }
 
         public DateTime? DateClosed { get; set; }
-        
+
+        public List<Comment> Comments { get; set; }
+
     }
 }
